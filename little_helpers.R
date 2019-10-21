@@ -59,10 +59,10 @@ split_and_measure_length <- function(df_, split_by_str, write_file = F, file_nam
   
   df_output <- data.frame(split_by_str = names_vector, 'number_of_values' = lenght_vector)
   
-  if (file_name == '' && write_file = T) {
+  if (file_name == '' && write_file == T) {
     write.table(x = df_output, file = paste0(deparse(substitute(df_)), '_splited_by_', split_by_str, '_column.tsv'), row.names = F, sep = '\t', quote = F)
   }
-  else if (file_name != '' && write_file = T) {
+  else if (file_name != '' && write_file == T) {
     write.table(x = df_output, file = file_name, row.names = F, sep = '\t', quote = F)
   }  
   

@@ -91,7 +91,7 @@ check_was_the_spliting_of_df_by_filtering_ok <- function(str_what_was_splited = 
 extract_from_string <- function(chr_vec, regex_one = '', regex_two = '')
 {
   chr_vec2 <- stringr::str_extract(string = chr_vec, pattern = regex_one)
-  chr_vec3 <- stringr::str_remove(string = test$ass, pattern = regex_two)
+  chr_vec3 <- stringr::str_remove(string = chr_vec2, pattern = regex_two)
   
   return(chr_vec3)
 }

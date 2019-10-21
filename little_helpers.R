@@ -50,3 +50,21 @@ function_enrich_list <- function(tibble_list = enrich_overview_list, gene_names_
 
 
 
+split_and_measure_length <- function(df_, split_by_str, file_name = '')
+{
+  df_list <- split(df_, f = df_[[split_by_str]])
+  
+  names_vector <- names(df_list)
+  lenght_vector <- as.character(lapply(X = df_list, FUN = function(x) { length(x[[1]]) } ))
+  
+  df_output <- data.frame(split_by_str = names_vector, 'number_of_values' = lenght_vector)
+  
+  if (file_name == '') {
+    write.table(x = df_output, file = paste0(deparse(substitute(df_)), '_splited_by_', split_by_str, '_column.tsv'), row.names = F, sep = '\t', quote = F)
+  }
+  else {
+    write.table(x = df_output, file = file_name, row.names = F, sep = '\t', quote = F)
+  }
+  
+  return(df_output)
+}

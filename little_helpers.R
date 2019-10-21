@@ -84,3 +84,14 @@ check_was_the_spliting_of_df_by_filtering_ok <- function(str_what_was_splited = 
 
   return(was_spliting_good)
 }
+
+
+
+# For extracting part of a string, for which we know beggining or end. Function first captures this known beggining or end of string, and then trims it from the other side using known value for trimming. In other words, function cuts the string from larger string using two border regexes. INPUT: Depending on wether string You want starts with known value or ends with known value, first use regex_one_, than regex_two_ for cutting string from the other side
+extract_from_string <- function(chr_vec, regex_one = '', regex_two = '')
+{
+  chr_vec2 <- stringr::str_extract(string = chr_vec, pattern = regex_one)
+  chr_vec3 <- stringr::str_remove(string = test$ass, pattern = regex_two)
+  
+  return(chr_vec3)
+}

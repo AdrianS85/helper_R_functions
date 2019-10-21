@@ -68,3 +68,19 @@ split_and_measure_length <- function(df_, split_by_str, write_file = F, file_nam
   
   return(df_output)
 }
+
+
+
+# Compares lenght of original df to child dfs, that were split from original df by filtering. INPUT: str_what_was_splited - name for a file in which the result will be written to. OUTPUT: bool_ - This is true when lendght of og_df == summed lenghts of child dfs, written file
+check_was_the_spliting_of_df_by_filtering_ok <- function(str_what_was_splited = '', df_original, list_df_splited)
+{
+  lenght_of_original_df <- length(df_original[[1]])
+  lenght_of_child_df <- sum( as.integer(lapply(X = list_df_splited, FUN = function(x) { length(x[[1]]) } )) )
+
+  was_spliting_good <- lenght_of_original_df == lenght_of_child_df
+
+  df_to_write_was_spliting_good <- as.data.frame(was_spliting_good)
+  colnames(df_to_write_was_spliting_good) <- str_what_was_splited
+
+  return(was_spliting_good)
+}

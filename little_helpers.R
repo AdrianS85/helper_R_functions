@@ -102,7 +102,11 @@ extract_from_string <- function(chr_vec, regex_one = '', regex_two = '')
 recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, with_this_chrvec)
 {
   assertthat::assert_that(length(replace_this_chrvec) == length(with_this_chrvec), msg = 'replace_this_chrvec and with_this_chrvec arguments need to be the same lenght. This is because every element in first vector will be recoded as corresponding element in the second vector')
-  assertthat::assert_that(!any(duplicated(replace_this_chrvec)),!any(duplicated(with_this_chrvec)), msg = 'replace_this_chrvec or with_this_chrvec arguments include duplicated values. This cannot be, because we use one specific value to be changed into another specific value')
+  assertthat::assert_that(!any(duplicated(replace_this_chrvec)), !any(duplicated(with_this_chrvec)), msg = 'replace_this_chrvec or with_this_chrvec arguments include duplicated values. This cannot be, because we use one specific value to be changed into another specific value')
+  
+  replace_this_chrvec <- as.character(replace_this_chrvec)
+  with_this_chrvec <- as.character(with_this_chrvec)
+  to_recode_chrvec <- as.character(to_recode_chrvec)
   
   key_value_pairs <-
     data.frame(replace_this_chrvec, with_this_chrvec)
@@ -110,7 +114,7 @@ recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, wi
   to_recode_chrvec <- data.frame(to_recode_chrvec)
   
   to_recode_chrvec$order <- as.integer(rownames(to_recode_chrvec))
-  
+
   result_chrvec <-
     merge(
       x = to_recode_chrvec,
@@ -120,7 +124,7 @@ recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, wi
       all.x = T
     )
   
-  result_chrvec <- result_chrvec[order(result_chrvec$order), ]
+  result_chrvec <- result_chrvec[order(result_chrvec$order),]
   
   return(result_chrvec$with_this_chrvec)
 }

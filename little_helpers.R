@@ -128,3 +128,20 @@ recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, wi
   
   return(result_chrvec$with_this_chrvec)
 }
+
+
+
+get_all_symbols_in_chrvec <- function(chrvec)
+{
+  symbols <-
+    lapply(
+      X = chrvec,
+      FUN = function(x) {
+        paste(strsplit(x, '')[[1]])
+      }
+    )
+  
+  symbols <- unlist(symbols, use.names=FALSE)
+  
+  return(sort(unique(symbols)))
+}

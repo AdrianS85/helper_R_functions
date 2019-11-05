@@ -75,7 +75,7 @@ split_and_measure_length <- function(df_, split_by_str, write_file = F, file_nam
 check_was_the_spliting_of_df_by_filtering_ok <- function(str_what_was_splited = '', df_original, list_df_splited)
 {
   lenght_of_original_df <- length(df_original[[1]])
-  lenght_of_child_df <- sum( as.integer(lapply(X = list_df_splited, FUN = function(x) { length(x[[1]]) } )) )
+  lenght_of_child_df <- sum( as.integer(lapply(X = list_df_splited, FUN = function(x) { length(as.character(x[[1]])) } )) )
 
   was_spliting_good <- lenght_of_original_df == lenght_of_child_df
 

@@ -146,3 +146,23 @@ get_all_symbols_in_chrvec <- function(chrvec)
   
   return(sort(unique(symbols)))
 }
+
+
+
+#This checks if in each position all values in each vector are the same by checking if unique'ing them gives char vector of lenght 1.
+are_vectors_the_same <- function(chr_vec_list)
+{
+  temp <- rlist::list.rbind(chr_vec_list)
+  temp <- data.frame(temp, stringsAsFactors=FALSE)
+  temp <- as.list(temp)
+  
+  temp2 <- sapply(
+    X = temp,
+    FUN = function(x) {
+      u_x <- unique(x)
+      length(u_x)
+    }
+  )
+  
+  if(min(temp2) == 1 & max(temp2) == 1){ return(T)} else {return(F)}
+}

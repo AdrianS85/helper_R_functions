@@ -149,7 +149,7 @@ get_all_symbols_in_chrvec <- function(chrvec)
 
 
 
-#This checks if in each position all values in each vector are the same by checking if unique'ing them gives char vector of lenght 1.
+#This checks if in each position all values in each vector are the same by checking if unique'ing them gives char vector of lenght 1. IGNORES NA OBJECTS
 are_vectors_the_same <- function(chr_vec_list)
 {
   temp <- rlist::list.rbind(chr_vec_list)

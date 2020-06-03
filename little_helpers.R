@@ -166,3 +166,18 @@ are_vectors_the_same <- function(chr_vec_list)
   
   if(min(temp2) == 1 & max(temp2) == 1){ return(T)} else {return(F)}
 }
+
+
+
+read_excel_all_sheets <- function(directory, file_name, colNames_)
+{
+  directory_and_file <- paste0(directory, '/', file_name)
+  
+  sheet_names <- openxlsx::getSheetNames(directory_and_file)
+  
+  list <- purrr::map(.x = seq_along(sheet_names), .f = function(x) { openxlsx::read.xlsx(xlsxFile = directory_and_file, sheet = x, colNames = colNames_) })
+  
+  names(list) <- sheet_names
+  
+  return(list)
+}

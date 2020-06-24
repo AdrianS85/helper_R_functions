@@ -195,3 +195,11 @@ read_excel_all_sheets <- function(directory, file_name, colNames_)
   
   return(list)
 }
+
+
+#kill trailing spaces, all characters to lower, get all chars in each col
+verify_input <- function(df_)
+{
+  
+  
+}

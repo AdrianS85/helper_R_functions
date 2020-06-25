@@ -197,6 +197,26 @@ read_excel_all_sheets <- function(directory, file_name, colNames_)
 }
 
 
+
+remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower)
+{
+  if (repeated_spaces == T) {
+    chr_vec <- stringr::str_replace_all(string = chr_vec, pattern = ' {2,}', replacement = ' ')}
+  
+  if (trailing_spaces == T) {
+    chr_vec <- stringr::str_trim(string = chr_vec, side = 'both')}
+
+  if (character_NAs == T) {
+    chr_vec[chr_vec == 'NA'] <- NA}
+  
+   if (change_to_lower == T) {
+     chr_vec <- tolower(chr_vec)}
+  
+  return(chr_vec)
+}
+
+
+
 #kill trailing spaces, all characters to lower, get all chars in each col
 verify_input <- function(df_)
 {

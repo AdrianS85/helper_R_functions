@@ -200,7 +200,7 @@ read_excel_all_sheets <- function(directory, file_name, colNames_)
 
 remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower)
 {
-  if(class(chr_vec) == 'character'{
+  if(class(chr_vec) == 'character'){
     if (repeated_spaces == T) {
       chr_vec <- stringr::str_replace_all(string = chr_vec, pattern = ' {2,}', replacement = ' ')}
 

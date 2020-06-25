@@ -203,16 +203,16 @@ remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trai
   if(class(chr_vec) == 'character'){
     if (repeated_spaces == T) {
       chr_vec <- stringr::str_replace_all(string = chr_vec, pattern = ' {2,}', replacement = ' ')}
-
+    
     if (trailing_spaces == T) {
       chr_vec <- stringr::str_trim(string = chr_vec, side = 'both')}
-
+    
     if (character_NAs == T) {
       chr_vec[chr_vec == 'NA'] <- NA}
-
-     if (change_to_lower == T) {
-       chr_vec <- tolower(chr_vec)}
-
+    
+    if (change_to_lower == T) {
+      chr_vec <- tolower(chr_vec)}
+    
     return(chr_vec)
   } else { 
     warning('Supplied vector is not of class character!')

@@ -198,7 +198,7 @@ read_excel_all_sheets <- function(directory, file_name, colNames_)
 
 
 
-remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower)
+remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower, to_ascii)
 {
   if(class(chr_vec) == 'character'){
     if (repeated_spaces == T) {
@@ -213,18 +213,80 @@ remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trai
     if (change_to_lower == T) {
       chr_vec <- tolower(chr_vec)}
     
+    if (to_ascii == T) {
+      chr_vec <- stringi::stri_enc_toascii(chr_vec)}
+    
     return(chr_vec)
   } else { 
     warning('Supplied vector is not of class character!')
-    return(NULL) 
+    return(chr_vec) 
   }
 }
 
 
 
-#kill trailing spaces, all characters to lower, get all chars in each col
-verify_input <- function(df_)
+verify_df <- function(df_, only_qa = F, sort_by_col = NA, repeated_spaces_ = T, trailing_spaces_ = T, character_NAs_ = T, change_to_lower_ = T, to_ascii_ = T)
 {
+  if (only_qa == F) {
+    df_ <- purrr::map_dfc(.x = df_, .f = function(x) {remove_corrupting_symbols_from_chrvec(chr_vec = x, repeated_spaces = repeated_spaces_, trailing_spaces = trailing_spaces_, character_NAs = character_NAs_, change_to_lower = change_to_lower_, to_ascii = to_ascii_)})
+  }
+
   
+  if (!is.na(sort_by_col)) {
+    df_ <- df_[order(df_[[sort_by_col]]),]
+  }
   
+  qa <- list('symbols' = get_all_symbols_in_df_per_column(df_),
+             'unique' = purrr::map(.x = df_, .f = function(x){ sort(unique(x))}),
+             'col_types' = purrr::map(.x = df_, .f = class),
+             'na_perc' = purrr::map(.x = df_, .f = function(x) {(length(subset(x, (is.na(x))))/length(x))*100}),
+             'min-max' = purrr::map(.x = df_, .f = function(x) {
+               if (class(x) == 'numeric' || class(x) == 'integer' || class(x) == 'double') {
+                 temp <- subset(x, !is.na(x))
+                 return(paste0('From ', min(temp), ' to ', max(temp)))
+               } else return('Vector of class different than numeric, integer or double')
+                              })
+  )
+  
+  if (only_qa == F) {
+    return(list('df' = df_, 'qa' = qa))
+  } else return(qa)
+}
+
+
+
+# OUTPUT: [[1]] - actual prepared vector, [[2]] - dataframe for validation
+cleanup_differing_units <- function(charvec_, unit_identifier_regexList, unit_multiplier_list)
+{
+  temp <- data.frame(charvec_)
+  
+  temp$order <- c(1:length(charvec_))
+  
+  temp$number <- stringr::str_extract(string = temp$charvec_, pattern = '[0-9]{1,}')
+  
+  temp$number <- sapply(X = temp$number, FUN = function(x) {paste0(x, collapse = '') } )
+  
+  for (unit_nb in seq_along(unit_identifier_regexList)) {
+    temp2 <- subset(x = temp , subset = stringr::str_detect(string = charvec_, pattern = unit_identifier_regexList[[unit_nb]]))
+    
+    temp2$temp <- as.numeric(temp2$number) * unit_multiplier_list[[unit_nb]]
+    
+    if (unit_nb == 1) {
+      ret_urn <- temp2
+    } else if (unit_nb > 1) {
+      ret_urn <- rbind(ret_urn, temp2)
+    }
+  }
+  
+  ret_urn <- merge(temp, ret_urn, by = 'order', all.x = T)
+  
+  if(length(charvec_) != length(ret_urn[[1]])){
+    stop('Output differs from input. Probably You have an entry which matches to two or more of the unit_identifier_regexList')
+  }
+  
+  ret_urn <- dplyr::select(.data = ret_urn, order, charvec_.x, temp)
+  
+  ret_urn <- ret_urn[order(ret_urn$order),]
+  
+  return(list(ret_urn$temp, ret_urn))
 }

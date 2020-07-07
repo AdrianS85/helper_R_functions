@@ -290,3 +290,21 @@ cleanup_differing_units <- function(charvec_, unit_identifier_regexList, unit_mu
   
   return(list(ret_urn$temp, ret_urn))
 }
+
+
+
+validate_col_types <- function(df_, col_names_list, col_types_list)
+{
+  purrr::walk2(
+    .x = col_names_list, 
+    .y = col_types_list, 
+    .f = function(x,y){
+      if (class(df_[[x]]) != y) {
+        stop(paste0('column ', x, ' from provided df is not of required type ', y))
+      }
+    })
+  
+  print('GOOD! all columns are of proper type')
+  
+  return(T)
+}

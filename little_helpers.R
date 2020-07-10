@@ -172,7 +172,7 @@ remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trai
 }
 
 
-
+#Add - check if null, check is lenght ==0
 verify_df <- function(df_, only_qa = F, sort_by_col = NA, repeated_spaces_ = T, trailing_spaces_ = T, character_NAs_ = T, change_to_lower_ = T, to_ascii_ = T)
 {
   if (only_qa == F) {

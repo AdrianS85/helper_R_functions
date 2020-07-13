@@ -275,7 +275,7 @@ remove_repeated_values_from_string_series_from_final_column <- function(column_t
     
     row <- subset(row, !is.na(row))
 
-    temp$xxx[[row_nb]] <- paste0(row, collapse = ', ')
+    temp$xxx[[row_nb]] <- paste0(row, collapse = sep_)
   }
   
   return(temp$xxx)

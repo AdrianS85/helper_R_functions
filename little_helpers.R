@@ -303,3 +303,17 @@ remove_repeated_values_from_string_series_from_final_column <- function(column_t
   
   return(temp$xxx)
 }
+
+
+
+
+split_string_by_pattern_and_extract_vec_of_unique_values <- function(chr_vec, pattern_to_split_individual_strings_with, rm_repeated_spaces = T, rm_trailing_spaces = T, rm_character_NAs = T)
+{
+  split_ <- stringr::str_split_fixed(string = data_annotation$symbols$input_from_non_probes_leftovers$Symbol, pattern = ', ', n = Inf)
+  
+  and_get_unique_values <- unique(purrr::map_chr(.x = split_, .f = function(x) {x}))
+  
+  clean_unique_values <- remove_corrupting_symbols_from_chrvec(chr_vec = and_get_unique_values, repeated_spaces = T, trailing_spaces = T, character_NAs = T, change_to_lower = F, to_ascii = F)
+  
+  return(clean_unique_values)
+}

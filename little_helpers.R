@@ -309,7 +309,7 @@ remove_repeated_values_from_string_series_from_final_column <- function(column_t
 
 split_string_by_pattern_and_extract_vec_of_unique_values <- function(chr_vec, pattern_to_split_individual_strings_with, rm_repeated_spaces = T, rm_trailing_spaces = T, rm_character_NAs = T)
 {
-  split_ <- stringr::str_split_fixed(string = data_annotation$symbols$input_from_non_probes_leftovers$Symbol, pattern = ', ', n = Inf)
+  split_ <- stringr::str_split_fixed(string = chr_vec, pattern = pattern_to_split_individual_strings_with, n = Inf)
   
   and_get_unique_values <- unique(purrr::map_chr(.x = split_, .f = function(x) {x}))
   

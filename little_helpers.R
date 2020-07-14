@@ -261,29 +261,6 @@ validate_col_types <- function(df_, col_names_list, col_types_list)
 
 
 
-remove_repeated_values_from_string_series_from_final_column <- function(column_to_process, sep_)
-{
-  temp <- as.data.frame(stringr::str_split_fixed(string = column_to_process, pattern = sep_, n = Inf))
-  
-  temp[temp == ''] <- NA
-  
-  temp$xxx <- NA
-  
-  for (row_nb in seq(length(temp[[1]]))) {
-    
-    row <- unique(t(temp[row_nb,]))
-    
-    row <- subset(row, !is.na(row))
-
-    temp$xxx[[row_nb]] <- paste0(row, collapse = sep_)
-  }
-  
-  return(temp$xxx)
-}
-
-
-
-
 paste_strings_consisting_of_series_of_values <- function(strings_to_add_list, divider_of_values_in_serie_str, uniqualize = F)
 {
   combined_string <- strings_to_add_list[[1]]

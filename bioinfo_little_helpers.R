@@ -31,7 +31,7 @@ get_random_genes <- function(sample_size_int, species_str = '', df_with_full_lis
 
 
 
-
+# Number of entires for [Organism] name: 102702 rattus, rat, rats // 273852 mouse, mus, mice // 224903 homo, humans // 224866 human // 30931 squirrel monkeys, Saimiri // 30905 saimiri boliviensis
 normalized_species_names <- list(mouse = 'mice', rat = 'rats', human = 'humans', sheep = 'sheep', saimiri = 'saimiri')
 
 

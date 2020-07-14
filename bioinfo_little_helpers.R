@@ -32,7 +32,7 @@ get_random_genes <- function(sample_size_int, species_str = '', df_with_full_lis
 
 
 
-normalized_species_names <- list(mouse = 'mice', rat = 'rats', human = 'humans', sheep = 'sheep', saimiri = 'squirrelmonkeys')
+normalized_species_names <- list(mouse = 'mice', rat = 'rats', human = 'humans', sheep = 'sheep', saimiri = 'saimiri')
 
 
 

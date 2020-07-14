@@ -146,7 +146,7 @@ read_excel_all_sheets <- function(directory, file_name, colNames_)
 
 
 
-remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower, to_ascii)
+remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower, to_ascii, empty_strings = T)
 {
   if(class(chr_vec) == 'character'){
     if (repeated_spaces == T) {
@@ -163,6 +163,9 @@ remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trai
     
     if (to_ascii == T) {
       chr_vec <- stringi::stri_enc_toascii(chr_vec)}
+    
+    if (empty_strings == T) {
+      chr_vec[chr_vec == ''] <- NA}
     
     return(chr_vec)
   } else { 

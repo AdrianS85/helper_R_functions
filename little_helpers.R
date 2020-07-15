@@ -320,3 +320,28 @@ split_string_by_pattern_and_extract_vec_of_unique_values <- function(chr_vec, pa
   
   return(clean_unique_values)
 }
+
+
+
+
+
+split_string_by_pattern_and_replace_values_according_to_key <- function(string_to_split, pattern_to_split_with, key_replace_this_chrvec, key_with_this_chrvec, return_unique_values)
+{
+  child_strings <- split_string_by_pattern_and_extract_vec_of_unique_values(string_to_split, pattern = pattern_to_split_with)
+  
+  recoded <- recode_values_based_on_key(to_recode_chrvec = child_strings, replace_this_chrvec = key_replace_this_chrvec, with_this_chrvec = key_with_this_chrvec)
+  
+  recoded <- recoded[!is.na(recoded)]
+  
+  if (length(recoded) == 0) {
+    return(NA)
+  } else {
+    recoded <- paste(recoded, collapse = pattern_to_split_with)
+    
+    if (return_unique_values == T) {
+      return(unique(recoded))
+    } else if (return_unique_values == F) {
+      return(recoded)
+    }
+  }
+}

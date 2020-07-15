@@ -32,7 +32,37 @@ get_random_genes <- function(sample_size_int, species_str = '', df_with_full_lis
 
 
 # Number of entires for [Organism] name: 102702 rattus, rat, rats // 273852 mouse, mus, mice // 224903 homo, humans // 224866 human // 30931 squirrel monkeys, Saimiri // 30905 saimiri boliviensis
-normalized_species_names <- list(mouse = 'mice', rat = 'rats', human = 'humans', sheep = 'sheep', saimiri = 'saimiri')
+normalize_species_names <- function(species__vec, mouse = 'mice', rat = 'rats', human = 'humans', sheep = 'sheep', saimiri = 'saimiri')
+{
+  
+  print(paste('Normalized species names are:', mouse, rat, human, sheep, saimiri, sep = ', '))
+  
+  validate_col_types(df_ = species__vec, col_names_list = list(1), col_types_list = list('character'))
+  
+  species__vec <- remove_corrupting_symbols_from_chrvec(chr_vec = species__vec, repeated_spaces = T, trailing_spaces = T, character_NAs = T, change_to_lower = T, to_ascii = T)
+  
+  species_proper <- rep(x = NA, length(species__vec))
+  
+  for (sp_nb in seq_along(species__vec)) {
+    if (stringr::str_detect(string = species__vec[sp_nb], pattern = '^mus$|^mouse$|^mice$|^mus musculus$')) {
+      species_proper[sp_nb] <- mouse
+    } else if (stringr::str_detect(string = species__vec[sp_nb], pattern = '^rattus$|^rat$|^rats$|^rattus norvegicus$')) {
+      species_proper[sp_nb] <- rat
+    } else if (stringr::str_detect(string = species__vec[sp_nb], pattern = '^homo$|^human$|^humans$|^homo sapiens$')) {
+      species_proper[sp_nb] <- human
+    } else if (stringr::str_detect(string = species__vec[sp_nb], pattern = '^sheep$|^ovis$|^ovis aries$')) {
+      species_proper[sp_nb] <- sheep
+    }  else if (stringr::str_detect(string = species__vec[sp_nb], pattern = '^saimiri$|^squirrel monkey$|^squirrel monkeys$|^squirrelmonkeys$')) {
+      species_proper[sp_nb] <- saimiri
+    } else if (is.na(species__vec[sp_nb])) {
+      species_proper[sp_nb] <- NA
+    } else {
+      stop('you have corrupted species names in the vector. see the function to learn how and which species are available')
+    }
+  }
+  
+  return(species_proper)
+}
 
 
 

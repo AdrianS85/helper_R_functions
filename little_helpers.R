@@ -343,5 +343,4 @@ split_string_by_pattern_and_replace_values_according_to_key <- function(string_t
       recoded <- paste(recoded, collapse = pattern_to_split_with)
       return(recoded)
     }
-  }
 }

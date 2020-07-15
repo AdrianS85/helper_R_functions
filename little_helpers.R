@@ -335,12 +335,12 @@ split_string_by_pattern_and_replace_values_according_to_key <- function(string_t
   
   if (length(recoded) == 0) {
     return(NA)
-  } else {
-    recoded <- paste(recoded, collapse = pattern_to_split_with)
-    
-    if (return_unique_values == T) {
-      return(unique(recoded))
+  } else if (return_unique_values == T) {
+      recoded <- unique(recoded)
+      recoded <- paste(recoded, collapse = pattern_to_split_with)
+      return(recoded)
     } else if (return_unique_values == F) {
+      recoded <- paste(recoded, collapse = pattern_to_split_with)
       return(recoded)
     }
   }

@@ -74,7 +74,7 @@ recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, wi
   
   result_chrvec <- result_chrvec[order(result_chrvec$order),]
   
-  return(as.character(result_chrvec$with_this_chrvec)) !!! ### ADDED LATER - as.character()
+  return(as.character(result_chrvec$with_this_chrvec)) ### !!! ADDED LATER - as.character()
 }
 
 

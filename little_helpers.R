@@ -344,3 +344,44 @@ split_string_by_pattern_and_replace_values_according_to_key <- function(string_t
       return(recoded)
     }
 }
+
+
+
+
+
+compare_sample_rows_in_i_vs_o <- function(in_df, out_df, analysis_name, sample_size = 100, should_i_order_dfs_before_sampling = F, order_by_in_col = NA, order_by_out_col = NA, write_to_folder = NA, drop_i_cols = NA, drop_o_cols = NA, sep_for_write = '\t', dec_for_write = ',')
+{
+  if (length(in_df[[1]]) != length(out_df[[2]])) { 
+    warning(paste0('input has different lenght than output. this function compares. ', analysis_name, ' was not performed'))
+    return(list('in' = NA, 'out' = NA))}
+  
+  if (all(rownames(in_df) == seq_along(rownames(in_df))) & all(rownames(out_df) == seq_along(rownames(out_df)))) {
+    in_df <- in_df[order(row.names(in_df)),]
+    out_df <- out_df[order(row.names(out_df)),]
+  } else {
+    warning(paste0('rownames of input or output are not sequence of numbers ', analysis_name, ' was not performed'))
+    return(list('in' = NA, 'out' = NA))}
+
+  sample_ <- sample(x = seq_along(in_df[[1]]), size = sample_size)
+
+  input <- subset(x = in_df, subset = rownames(in_df) %in% sample_)
+  output <- subset(x = out_df, subset = rownames(out_df) %in% sample_)
+
+  if (!is.na(drop_i_cols)) {
+    input <- dplyr::select(.data = input, -drop_i_cols) }
+  if (!is.na(drop_o_cols)) {
+    output <- dplyr::select(.data = output, -drop_o_cols) }
+
+  if (!is.na(write_to_folder)) {
+    i_file_name <- paste0(write_to_folder, '/test_input_', analysis_name, '.tsv')
+    o_file_name <- paste0(write_to_folder, '/test_output_', analysis_name, '.tsv')
+  } else {
+    i_file_name <- paste0('test_input_', analysis_name, '.tsv')
+    o_file_name <- paste0('test_output_', analysis_name, '.tsv')
+  }
+
+  write.table(x = input, file = i_file_name, sep = sep_for_write, dec = dec_for_write, row.names = F)
+  write.table(x = output, file = o_file_name, sep = sep_for_write, dec = dec_for_write, row.names = F)
+
+  return(list('in' = input, 'out' = output))
+}

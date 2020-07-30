@@ -146,7 +146,7 @@ read_excel_all_sheets <- function(directory, file_name, colNames_)
 
 
 
-remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower, to_ascii, empty_strings = T)
+remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trailing_spaces, character_NAs, change_to_lower, to_ascii, empty_strings)
 {
   if(class(chr_vec) == 'character'){
     if (repeated_spaces == T) {
@@ -176,10 +176,10 @@ remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trai
 
 
 #Add - check if null, check is lenght ==0
-verify_df <- function(df_, only_qa = F, sort_by_col = NA, repeated_spaces_ = T, trailing_spaces_ = T, character_NAs_ = T, change_to_lower_ = T, to_ascii_ = T)
+verify_df <- function(df_, only_qa = F, sort_by_col = NA, repeated_spaces_ = T, trailing_spaces_ = T, character_NAs_ = T, empty_strings_ = T, change_to_lower_ = T, to_ascii_ = T)
 {
   if (only_qa == F) {
-    df_ <- purrr::map_dfc(.x = df_, .f = function(x) {remove_corrupting_symbols_from_chrvec(chr_vec = x, repeated_spaces = repeated_spaces_, trailing_spaces = trailing_spaces_, character_NAs = character_NAs_, change_to_lower = change_to_lower_, to_ascii = to_ascii_)})
+    df_ <- purrr::map_dfc(.x = df_, .f = function(x) {remove_corrupting_symbols_from_chrvec(chr_vec = x, repeated_spaces = repeated_spaces_, trailing_spaces = trailing_spaces_, character_NAs = character_NAs_, empty_strings = empty_strings_, change_to_lower = change_to_lower_, to_ascii = to_ascii_)})
   }
 
   

@@ -42,7 +42,7 @@ normalize_species_names <- function(species__vec, mouse = 'mice', rat = 'rats', 
   } else{
     validate_col_types(df_ = species__vec, col_names_list = list(1), col_types_list = list('character'))
     
-    species__vec <- remove_corrupting_symbols_from_chrvec(chr_vec = species__vec, repeated_spaces = T, trailing_spaces = T, character_NAs = T, change_to_lower = T, to_ascii = T)
+    species__vec <- remove_corrupting_symbols_from_chrvec(chr_vec = species__vec, repeated_spaces = T, trailing_spaces = T, character_NAs = T, change_to_lower = T, to_ascii = T, empty_strings = T)
     
     species_proper <- rep(x = NA, length(species__vec))
     

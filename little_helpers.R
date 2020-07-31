@@ -272,13 +272,15 @@ paste_strings_consisting_of_series_of_values <- function(strings_to_add_list, di
     combined_string <- paste(combined_string, char_vec, sep = divider_of_values_in_serie_str)
   }
 
-  combined_string <- stringr::str_remove(string = combined_string, pattern = paste0('NA', divider_of_values_in_serie_str))
+  combined_string <- stringr::str_remove_all(string = combined_string, pattern = paste0('NA', divider_of_values_in_serie_str))
+  combined_string <- stringr::str_remove(string = combined_string, pattern = paste0(divider_of_values_in_serie_str, 'NA$'))
   
   if (uniqualize == T) {
     combined_string <- remove_repeated_values_from_string_series_from_final_column(column_to_process = combined_string, sep_ = divider_of_values_in_serie_str)
   }
   
   combined_string[combined_string == 'NA'] <- NA
+  combined_string[combined_string == ''] <- NA
 
   return(combined_string)
 }

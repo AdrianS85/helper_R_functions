@@ -318,7 +318,7 @@ split_string_by_pattern_and_extract_vec_of_unique_values <- function(chr_vec, pa
   
   and_get_unique_values <- unique(purrr::map_chr(.x = split_, .f = function(x) {x}))
   
-  clean_unique_values <- remove_corrupting_symbols_from_chrvec(chr_vec = and_get_unique_values, repeated_spaces = T, trailing_spaces = T, character_NAs = T, change_to_lower = F, to_ascii = F)
+  clean_unique_values <- remove_corrupting_symbols_from_chrvec(chr_vec = and_get_unique_values, repeated_spaces = T, trailing_spaces = T, character_NAs = T, change_to_lower = F, to_ascii = F, empty_strings = T)
   
   return(clean_unique_values)
 }

@@ -387,3 +387,27 @@ compare_sample_rows_in_i_vs_o <- function(in_df, out_df, analysis_name, sample_s
 
   return(list('in' = input, 'out' = output))
 }
+
+
+
+
+
+
+group_and_then_summarize_all_cols_in_df <- function(df_, group_by_col, summarize_method = 'median')
+{
+  df_nested <- dplyr::nest_by(.data = df_, eval(parse(text = group_by_col)))
+  
+  md <- purrr::map_df(
+    .x = df_nested$data, 
+    .f = function(group_){
+      
+      purrr:: map_df(.x = group_, .f = function(column){
+        
+        if (is.numeric(column)) {
+          eval(parse(text = summarize_method))(column)
+        } else { paste(unique(column), collapse = '____')}
+        
+      })
+  })
+  return(md)
+}

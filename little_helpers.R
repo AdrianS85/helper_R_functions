@@ -411,3 +411,32 @@ group_and_then_summarize_all_cols_in_df <- function(df_, group_by_col, summarize
   })
   return(md)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+### From: https://stackoverflow.com/questions/4948361/how-do-i-save-warnings-and-errors-as-output-from-a-function
+catchWarningsAndErrors <- function(expr) {
+  val <- NULL
+  myWarnings <- NULL
+  wHandler <- function(w) {
+    myWarnings <<- c(myWarnings, w$message)
+    invokeRestart("muffleWarning")
+  }
+  myError <- NULL
+  eHandler <- function(e) {
+    myError <<- e$message
+    NULL
+  }
+  val <- tryCatch(withCallingHandlers(expr, warning = wHandler), error = eHandler)
+  list(warnings = myWarnings, error=myError)
+} 

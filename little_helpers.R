@@ -1,4 +1,5 @@
 # rm(list = ls(pattern = '(.*)(temp)|(test)(.*)'))
+# options(scipen = 999)
 
 split_and_measure_length <- function(df_, split_by_str, write_file = F, file_name = '')
 {

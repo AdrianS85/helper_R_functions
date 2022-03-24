@@ -1,5 +1,6 @@
 # rm(list = ls(pattern = '(.*)(temp)|(test)(.*)'))
 # options(scipen = 999)
+# cluster xxx.tsv -g 4 -m a -u xxx
 
 split_and_measure_length <- function(df_, split_by_str, write_file = F, file_name = '')
 {

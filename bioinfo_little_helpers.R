@@ -133,6 +133,6 @@ retrieve_RG_values_from_log2MA <- function(M_, A_)
   
   G_ <- R_/2^M_
   
-  return( c(R_, G_) )
+  return( list("R" = R_, "G" = G_) )
 }
 

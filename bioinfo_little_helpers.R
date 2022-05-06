@@ -121,3 +121,18 @@ function_enrich_list <- function(tibble_list = enrich_overview_list, gene_names_
   
   return(final_list_2)
 }
+
+
+
+
+
+retrieve_RG_values_from_log2MA <- function(M_, A_)
+{
+  
+  R_ <- sqrt( (2^(2*A_))*2^M_ )
+  
+  G_ <- R_/2^M_
+  
+  return( c(R_, G_) )
+}
+

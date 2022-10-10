@@ -180,28 +180,53 @@ remove_corrupting_symbols_from_chrvec <- function(chr_vec, repeated_spaces, trai
 
 
 #Add - check if null, check is lenght ==0
-verify_df <- function(df_, only_qa = F, sort_by_col = NA, repeated_spaces_ = T, trailing_spaces_ = T, character_NAs_ = T, empty_strings_ = T, change_to_lower_ = T, to_ascii_ = T)
+verify_df <- function(df_, only_qa = F, sort_by_col = NA, repeated_spaces_ = T, trailing_spaces_ = T, character_NAs_ = T, empty_strings_ = T, change_to_lower_ = T, to_ascii_ = T, possible_na_values = c("na", "nan", "none", "no", "empty", "missing", "bad"))
 {
   if (only_qa == F) {
     df_ <- purrr::map_dfc(.x = df_, .f = function(x) {remove_corrupting_symbols_from_chrvec(chr_vec = x, repeated_spaces = repeated_spaces_, trailing_spaces = trailing_spaces_, character_NAs = character_NAs_, empty_strings = empty_strings_, change_to_lower = change_to_lower_, to_ascii = to_ascii_)})
   }
-
   
   if (!is.na(sort_by_col)) {
     df_ <- df_[order(df_[[sort_by_col]]),]
   }
   
-  qa <- list('symbols' = get_all_symbols_in_df_per_column(df_),
-             'unique' = purrr::map(.x = df_, .f = function(x){ sort(unique(x))}),
-             'col_types' = purrr::map(.x = df_, .f = class),
-             'na_perc' = purrr::map(.x = df_, .f = function(x) {(length(subset(x, (is.na(x))))/length(x))*100}),
-             'min-max' = purrr::map(.x = df_, .f = function(x) {
-               if (class(x) == 'numeric' || class(x) == 'integer' || class(x) == 'double') {
-                 temp <- subset(x, !is.na(x))
-                 return(paste0('From ', min(temp), ' to ', max(temp)))
-               } else return('Vector of class different than numeric, integer or double')
-                              })
-  )
+  qa <- list(
+    'col_types' = purrr::map(.x = df_, .f = class),
+    
+    'symbols' = get_all_symbols_in_df_per_column(df_),
+    
+    'unique' = purrr::map(.x = df_, .f = function(x){ sort(unique(x)) }),
+    
+    'duplicates' = purrr::map(.x = df_, .f = function(x){
+      x_log <- duplicated(x)
+      unique(x[x_log])
+      }),
+    
+    'na_perc' = purrr::map(.x = df_, .f = function(x) { (length(subset(x, (is.na(x))))/length(x))*100 }),
+    
+    'possible_nas' = purrr::map(.x = df_, .f = function(x) {
+      if (class(x) == 'character') {
+        res_ <- purrr::map(
+          .x = possible_na_values,
+          .f = function(possible_na_value) {
+            any(ifelse(x[!is.na(x)] == possible_na_value, T, F))
+            })
+        names(res_) <- possible_na_values
+        res_
+        } else return('Vector of class different than character')
+      }),
+    
+    "max_string_lenght" = purrr::map(.x = df_, .f = function(x){ max(stringr::str_length(as.character(x)), na.rm = T) }),
+    
+    'min-max' = purrr::map(.x = df_, .f = function(x) {
+      if (class(x) == 'numeric' || class(x) == 'integer' || class(x) == 'double') {
+        temp <- subset(x, !is.na(x))
+        return(paste0('From ', min(temp), ' to ', max(temp)))
+        } else return('Vector of class different than numeric, integer or double')
+      })
+    )
+  
+  
   
   if (only_qa == F) {
     return(list('df' = df_, 'qa' = qa))

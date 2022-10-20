@@ -482,3 +482,45 @@ catchWarningsAndErrors <- function(expr) {
   val <- tryCatch(withCallingHandlers(expr, warning = wHandler), error = eHandler)
   list(warnings = myWarnings, error=myError)
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Useful when you want to work with subsets of lists in purrr
+get_given_intervals_up_to_given_length <- function(from, to, interval_length)
+{
+
+  vec_length <- to-from+1
+
+  nb_of_intervals_in_vec <- vec_length/interval_length
+
+  interval_list <- list()
+
+  current_lower_bound <- from
+
+  for (intv_nb in seq(1:ceiling(nb_of_intervals_in_vec))) {
+
+    if (current_lower_bound + interval_length - 1 < to) {
+      interval_list[[intv_nb]] <- seq(current_lower_bound, current_lower_bound + interval_length - 1)
+
+      current_lower_bound <- current_lower_bound + interval_length
+
+    } else if (current_lower_bound + interval_length - 1 >= to) {
+      interval_list[[intv_nb]] <- seq(current_lower_bound, to)
+    }
+
+  }
+  interval_list
+}
+

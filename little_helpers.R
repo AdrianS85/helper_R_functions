@@ -524,3 +524,43 @@ get_given_intervals_up_to_given_length <- function(from, to, interval_length)
   interval_list
 }
 
+
+
+
+
+
+expand.grid_but_truely_unique_combinations <- function(vec_list, return_also_same_value_combs = T, string_to_colapse_separate_values_with = "string_to_colapse_separate_values_with", return_vector_as_opposed_to_string_for_each_combination = T){
+  
+  if (!is.list(vec_list) & length(vec_list) > 1) {
+    stop("Please provide at least 2 vectors as a list")
+  }
+  
+  df_ <- as.data.frame(expand.grid(vec_list))
+  
+  t_df_ <- as.data.frame(t(df_))
+  
+  unique_levels <- purrr::compact(purrr::map(
+    .x = t_df_,
+    .f = function(col){
+      
+      if (return_also_same_value_combs == T) {
+        if (length(unique(col)) == 1) {
+          return(NULL)
+        }
+      }
+      
+      paste(sort(col), collapse = string_to_colapse_separate_values_with)
+    }))
+  
+  uniques <- unique(as.character(unique_levels))
+  
+  if (return_vector_as_opposed_to_string_for_each_combination) {
+    
+    splited <- strsplit(uniques, string_to_colapse_separate_values_with)
+    
+    splited_t <- purrr::transpose(splited)
+    
+    purrr::map(.x = splited_t, .f = as.character)
+    
+  } else {uniques}
+}

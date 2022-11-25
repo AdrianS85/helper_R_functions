@@ -237,7 +237,7 @@ verify_df <- function(df_, produce_updated = T, sort_by_col = NA, repeated_space
     })
   )
   
-  "max_string_lenght" = purrr::map(.x = df_, .f = function(x){ max(stringr::str_length(as.character(x)), na.rm = T) }),
+  "max_string_lenght" = purrr::map(.x = df_, .f = function(x){ max(stringr::str_length(as.character(x)), na.rm = T) })
   
   return(list('df' = df_, 'qa' = qa))
 }

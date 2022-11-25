@@ -218,7 +218,7 @@ verify_df <- function(df_, produce_updated = T, sort_by_col = NA, repeated_space
         res_ <- purrr::map(
           .x = possible_na_values,
           .f = function(possible_na_value) {
-            any(ifelse(x[!is.na(x)] == possible_na_value, T, F))
+            any(ifelse(tolower(x[!is.na(x)]) == possible_na_value, T, F))
           })
         names(res_) <- possible_na_values
         res_

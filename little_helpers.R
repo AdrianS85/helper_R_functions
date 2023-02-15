@@ -251,7 +251,7 @@ cleanup_differing_units <- function(charvec_, unit_identifier_regexList, unit_mu
   
   temp$order <- c(1:length(charvec_))
   
-  temp$number <- stringr::str_extract(string = temp$charvec_, pattern = '[0-9]{1,}')
+  temp$number <- stringr::str_extract(string = temp$charvec_, pattern = '[0-9]{1,}') ### !!! What if there is "10 000 px"?
   
   temp$number <- sapply(X = temp$number, FUN = function(x) {paste0(x, collapse = '') } )
   
@@ -400,7 +400,7 @@ compare_sample_rows_in_i_vs_o <- function(in_df, out_df, analysis_name, sample_s
     out_df <- out_df[order(row.names(out_df)),]
   } else {
     warning(paste0('rownames of input or output are not sequence of numbers ', analysis_name, ' was not performed'))
-    return(list('in' = NA, 'out' = NA))}
+    return(list('in' = NA, 'out' = NA))} ### !!! Meh. Dumb requirement
 
   sample_ <- sample(x = seq_along(in_df[[1]]), size = sample_size)
 

@@ -20,7 +20,7 @@ generate_alluvial <- function(
   bg_ <- "white"
   
   if (is.null(x_level_order)) { x_level_order <- unique(x_) }
-  if (is.null(color_labels)) { color_labels <- stratum_ }
+  if (is.null(color_labels)) { color_labels <- unique(stratum_) }
   if (is.null(x_name)) { x_name <- "x axis" }
   if (is.null(y_name)) { y_name <- "y axis" }
   if (is.null(stratum_name)) { stratum_name <- "color" }

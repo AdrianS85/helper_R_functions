@@ -566,3 +566,14 @@ expand.grid_but_truely_unique_combinations <- function(vec_list, return_also_sam
 clear_temp_test <- function(){
   rm(list = ls(pattern = '(.*)(temp)|(test)(.*)', envir = globalenv()), envir = globalenv())
 }
+
+
+
+colname_stringr_detect <- function(string_, regex_)
+{
+  colnames(string_)[stringr::str_detect(colnames(string_), regex_)]
+}
+
+  
+
+

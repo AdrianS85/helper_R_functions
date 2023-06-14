@@ -25,7 +25,7 @@ generate_alluvial <- function(
   if (is.null(y_name)) { y_name <- "y axis" }
   if (is.null(stratum_name)) { stratum_name <- "color" }
   
-  p_ <- ggplot(df, aes(x = x_, stratum = stratum_, alluvium = alluvium_, fill = stratum_, label = stratum_)) +
+  p_ <- ggplot(dataset, aes(x = x_, stratum = stratum_, alluvium = alluvium_, fill = stratum_, label = stratum_)) +
     scale_fill_brewer(labels = color_labels, type = "qual", palette = "Set2") +
     scale_x_discrete(expand = c(.1, .1), limits = x_level_order) +
     geom_flow() +

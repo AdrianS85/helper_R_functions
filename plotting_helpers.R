@@ -61,3 +61,44 @@ generate_alluvial <- function(
     units = "mm")
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+count_occurances_of_disaggregated_multiple_answer_questions <- function(
+    df_,
+    binary_recognition_regex,
+    presence_indicator,
+    absence_indicator)
+{
+  colnames_used <- colnames(df_)[stringr::str_detect(colnames(df_), binary_recognition_regex)]
+  
+  df_only_disagg_cols <- subset(
+    df_,
+    select = colnames_used )
+  
+  df_only_disagg_cols_ <- purrr::map_dfc(
+    .x = df_only_disagg_cols,
+    .f = function(col_){
+      
+      col_[col_ %in% presence_indicator] <- T
+      
+      col_[col_ %in% absence_indicator] <- F
+      col_
+    })
+  
+  output <- tibble::enframe( purrr::map_int(df_only_disagg_cols_, sum, na.rm =T), name = "this_value", value = "occurs_this_many_times" )
+  
+  # output <- output[order(output$occurs_this_many_times, decreasing = T),]
+  
+  return( list(colnames_used = colnames_used, output = output) ) 
+}

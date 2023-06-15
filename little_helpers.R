@@ -1,4 +1,4 @@
-# rm(list = ls(pattern = '(.*)(temp)|(test)(.*)'))
+# rm(list = ls(pattern = 'temp|test|tmp'))
 # options(scipen = 999)
 # cluster xxx.tsv -g 4 -m a -u xxx
 

@@ -11,7 +11,9 @@ generate_alluvial <- function(
     y_name = NULL,
     text_size = NULL,
     stratum_name = NULL,
-    plot_name = "alluvial_plot")
+    plot_name = "alluvial_plot",
+    output_dir = "" # do not end this with "/"
+) 
 {
   library(ggplot2)
   library(ggalluvial)
@@ -50,9 +52,11 @@ generate_alluvial <- function(
   }
 
   if (!is.null(text_size)) { p_ <- p_ + theme(text = element_text(size = text_size)) }
-  
+
+
+  filename <- paste0(output_dir, "/" stringr::str_replace_all(plot_name, " ", "_") ".png")
   ggsave(
-    filename = paste0(plot_name, ".png"),
+    filename = filename,
     plot = p_,
     device = "png",
     bg = background_color,

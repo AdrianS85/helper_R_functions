@@ -41,7 +41,7 @@ generate_alluvial <- function(
   
   if (!is.null(y_breaks)) { p_ <- p_ + scale_y_continuous(breaks = y_breaks) }
 
-  if (!is.null(theme_)) { p_ <- p_ + theme_) }
+  if (!is.null(theme_)) { p_ <- p_ + theme_ }
 
     
   ggsave(

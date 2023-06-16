@@ -69,8 +69,8 @@ generate_alluvial <- function(
 count_occurances_of_disaggregated_multiple_answer_questions <- function(
     df_, # entire dataset
     binary_recognition_regex, # to get only disaggregated columns for given variable
-    presence_indicator, # usually 1 or T
-    absence_indicator) # usually 0 or F
+    presence_indicator, # of the original data, usually 1 or T. will be force-changed to T
+    absence_indicator) # of the original data, usually 0 or F. will be force-changed to T
 {
   colnames_used <- colnames(df_)[stringr::str_detect(colnames(df_), binary_recognition_regex)]
   

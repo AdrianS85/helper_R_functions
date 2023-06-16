@@ -13,7 +13,7 @@ generate_alluvial <- function(
     stratum_name = NULL,
     plot_name = "alluvial_plot",
     output_dir = "" # do not end this with "/"
-) 
+) ### Change it so it takes theme instead of all the theme elements
 {
   library(ggplot2)
   library(ggalluvial)

@@ -53,13 +53,15 @@ generate_alluvial <- function(
 
   if (!is.null(text_size)) { p_ <- p_ + theme(text = element_text(size = text_size)) }
 
-
-  filename <- paste0(output_dir, "/" stringr::str_replace_all(plot_name, " ", "_") ".png")
+      
+  filename <- paste0(stringr::str_replace_all(plot_name, " ", "_") ".png")
+    
   ggsave(
     filename = filename,
     plot = p_,
     device = "png",
     bg = background_color,
+    path = "",
     width = 297,
     height = 210,
     units = "mm")

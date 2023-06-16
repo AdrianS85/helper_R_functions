@@ -10,8 +10,7 @@ generate_alluvial <- function(
     color_labels = NULL,
     x_name = NULL,
     y_name = NULL,
-    legend_name = NULL,
-    stratum_name = NULL,
+    stratum_name = NULL, # this is the color legend name
     plot_name = "alluvial_plot",
     output_file_name = "alluvial_plot"
 ) ### Change it so it takes theme instead of all the theme elements
@@ -27,7 +26,6 @@ generate_alluvial <- function(
   if (is.null(color_labels)) { color_labels <- unique(stratum_) }
   if (is.null(x_name)) { x_name <- "x axis" }
   if (is.null(y_name)) { y_name <- "y axis" }
-  if (is.null(legend_name)) { legend_name <- "y axis" }
   if (is.null(stratum_name)) { stratum_name <- "color" }
   
   p_ <- ggplot(dataset, aes(x = x_, stratum = stratum_, alluvium = alluvium_, fill = stratum_, label = stratum_)) +

@@ -569,9 +569,9 @@ clear_temp_test <- function(){
 
 
 
-colname_stringr_detect <- function(string_, regex_)
+colname_regex_detect <- function(df_, regex_)
 {
-  colnames(string_)[stringr::str_detect(colnames(string_), regex_)]
+  colnames(df_)[stringr::str_detect(colnames(df_), regex_)]
 }
 
   

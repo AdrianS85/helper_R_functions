@@ -55,7 +55,7 @@ generate_alluvial <- function(
 
     
   ggsave(
-    filename = output_file_name,
+    filename = paste0(output_file_name, ".png"),
     plot = p_,
     device = "png",
     bg = background_color,

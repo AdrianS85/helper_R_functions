@@ -12,7 +12,7 @@ generate_alluvial <- function(
     text_size = NULL,
     stratum_name = NULL,
     plot_name = "alluvial_plot",
-    output_dir = "" # do not end this with "/"
+    output_file_name = "alluvial_plot"
 ) ### Change it so it takes theme instead of all the theme elements
 {
   library(ggplot2)
@@ -53,15 +53,12 @@ generate_alluvial <- function(
 
   if (!is.null(text_size)) { p_ <- p_ + theme(text = element_text(size = text_size)) }
 
-      
-  filename <- paste0(stringr::str_replace_all(plot_name, " ", "_"), ".png")
     
   ggsave(
-    filename = filename,
+    filename = output_file_name,
     plot = p_,
     device = "png",
     bg = background_color,
-    path = output_dir,
     width = 297,
     height = 210,
     units = "mm")

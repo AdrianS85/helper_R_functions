@@ -61,7 +61,7 @@ generate_alluvial <- function(
     plot = p_,
     device = "png",
     bg = background_color,
-    path = "",
+    path = output_dir,
     width = 297,
     height = 210,
     units = "mm")

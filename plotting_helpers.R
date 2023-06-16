@@ -5,7 +5,7 @@ generate_alluvial <- function(
     alluvium_, # vector annotating values to a given wave/line, e.g. LONGIT_ID
     x_level_order = NULL, 
     y_breaks = NULL,
-    transparent = F,
+    background_color = NULL, # Can be set to "transparent" or "white" e.g.
     color_labels = NULL,
     x_name = NULL,
     y_name = NULL,
@@ -37,25 +37,22 @@ generate_alluvial <- function(
   
   if (!is.null(y_breaks)) { p_ <- p_ + scale_y_continuous(breaks = y_breaks) }
   
-  if (transparent) {
+  if (!is.null(background_color)) {
     
     p_ <- p_ + theme(
-      panel.background = element_rect(fill='transparent'),
-      plot.background = element_rect(fill='transparent', color=NA),
+      panel.background = element_rect(fill=background_color),
+      plot.background = element_rect(fill=background_color, color=NA),
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
-      legend.background = element_rect(fill='transparent'),
-      legend.box.background = element_rect(fill='transparent', colour = 'transparent'))
-    
-    bg_ <- "transparent"
-    
+      legend.background = element_rect(fill=background_color),
+      legend.box.background = element_rect(fill=background_color))  # legend.box.background = element_rect(fill=background_color, colour = 'transparent') 
   }
   
   ggsave(
     filename = paste0(plot_name, ".png"),
     plot = p_,
     device = "png",
-    bg = bg_,
+    bg = background_color,
     width = 297,
     height = 210,
     units = "mm")

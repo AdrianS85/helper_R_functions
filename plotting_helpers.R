@@ -9,7 +9,7 @@ generate_alluvial <- function(
     color_labels = NULL,
     x_name = NULL,
     y_name = NULL,
-    text_size = NULL
+    text_size = NULL,
     stratum_name = NULL,
     plot_name = "alluvial_plot")
 {

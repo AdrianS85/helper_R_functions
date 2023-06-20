@@ -104,7 +104,6 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
 
 
 
-
 convert_columns_to_given_types_using_vector_dicts <- function(
     df_to_convert,
     col_names, # vector of column names
@@ -115,11 +114,14 @@ convert_columns_to_given_types_using_vector_dicts <- function(
   dict_ <- as.list(col_types)
   names(dict_) <- col_names
   
-  assertthat::validate_that( all( colnames(df_to_convert) %in% col_names ), "BEWARE: some columns names in the data frame do not have their analouges in the col_names vector") ### !!! more details in the future?
-  
+  cols_in_df_absent_in_col_names <- subset(df_to_convert, select = !(colnames(df_to_convert) %in% col_names) )
 
   
-  converted_list_ <- purrr::imap_dfc(
+  if (ncol(cols_in_df_absent_in_col_names) != 0) { warning("BEWARE: some columns names in the data frame do not have their analouges in the col_names vector") }
+
+  
+  
+  converted_df_ <- purrr::imap_dfc(
     .x = dict_,
     .f = function(type_, column_){
       
@@ -135,8 +137,18 @@ convert_columns_to_given_types_using_vector_dicts <- function(
       if ( !(column_ %in% colnames(df_to_convert)) ) { 
         df_to_convert[[column_]] <- NA
         warning("BEWARE: column '", column_, "' provided in col_names is missing in the dataset")
-        }
-
+      }
+      
       convert_function(df_to_convert[[column_]])
     })
+  
+  converted_df_ <- subset(converted_df_, select = colnames(converted_df_) %in% colnames(df_to_convert))
+  
+  converted_df_ <- cbind(converted_df_, cols_in_df_absent_in_col_names)
+  
+  converted_df_[,colnames(df_to_convert)]
+
 }
+
+
+

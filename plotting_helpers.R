@@ -96,3 +96,47 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
   
   return( list(colnames_used = colnames_used, output = output) ) 
 }
+
+
+
+
+
+
+
+
+
+convert_columns_to_given_types_using_vector_dicts <- function(
+    df_to_convert,
+    col_names, # vector of column names
+    col_types # vector of type names 'character', 'numeric', 'Date' or 'factor', corresponding to given column names
+)
+{
+  
+  dict_ <- as.list(col_types)
+  names(dict_) <- col_names
+  
+  assertthat::validate_that( all( colnames(df_to_convert) %in% col_names ), "BEWARE: some columns names in the data frame do not have their analouges in the col_names vector") ### !!! more details in the future?
+  
+
+  
+  converted_list_ <- purrr::imap_dfc(
+    .x = dict_,
+    .f = function(type_, column_){
+      
+      type_ <- tolower(type_)
+      
+      assertthat::assert_that(type_ %in% c("character", "numeric", "date", "factor"), msg = "only recognized values are 'character', 'numeric' or 'date', 'factor'")
+      ### !!! not really, but ok for now
+      
+      if (type_ == "date") { type_ <- "Date" }
+      
+      convert_function <- match.fun(paste0("as.", type_)) 
+      
+      if ( !(column_ %in% colnames(df_to_convert)) ) { 
+        df_to_convert[[column_]] <- NA
+        warning("BEWARE: column '", column_, "' provided in col_names is missing in the dataset")
+        }
+
+      convert_function(df_to_convert[[column_]])
+    })
+}

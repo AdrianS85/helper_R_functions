@@ -108,7 +108,7 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
 convert_columns_to_given_types_using_vector_dicts <- function(
     df_to_convert,
     col_names, # vector of column names
-    col_types # vector of type names 'character', 'numeric', 'Date' or 'factor', corresponding to given column names
+    col_types # vector of type names 'character', 'numeric', 'Date' or 'factor', corresponding to given column names. date actually doesnt work very well with our current format
 )
 {
   

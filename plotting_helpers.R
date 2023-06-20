@@ -13,7 +13,8 @@ generate_alluvial <- function(
     stratum_name = NULL, # this is the color legend name
     plot_name = "alluvial_plot",
     subtitle_name = NULL,
-    output_file_name = "alluvial_plot"
+    output_file_name = "alluvial_plot",
+    autosave = T
 ) ### Change it so it takes theme instead of all the theme elements
 {
   library(ggplot2)
@@ -38,22 +39,24 @@ generate_alluvial <- function(
     geom_text(stat = "stratum",
               aes(label = percent(after_stat(prop), accuracy = .1)))+
     labs(title = plot_name, x = x_name, y = y_name, fill = stratum_name, subtitle = subtitle_name)
-
+  
   
   if (!is.null(y_breaks)) { p_ <- p_ + scale_y_continuous(breaks = y_breaks) }
-
-  if (!is.null(theme_)) { p_ <- p_ + theme_ }
-
-    
-  ggsave(
-    filename = paste0(output_file_name, ".png"),
-    plot = p_,
-    device = "png",
-    bg = background_color,
-    width = 297,
-    height = 210,
-    units = "mm")
   
+  if (!is.null(theme_)) { p_ <- p_ + theme_ }
+  
+  if (autosave) {
+    ggsave(
+      filename = paste0(output_file_name, ".png"),
+      plot = p_,
+      device = "png",
+      bg = background_color,
+      width = 297,
+      height = 210,
+      units = "mm")
+  }
+
+  return(p_)
 }
 
 

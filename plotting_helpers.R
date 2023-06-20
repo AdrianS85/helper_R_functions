@@ -155,3 +155,47 @@ convert_columns_to_given_types_using_vector_dicts <- function(
 
 
 
+
+
+
+
+
+
+
+
+
+### !!! Here we can input functions which will take a specific group of df columns and do something for each subsequent pair of them. So sliding window basically
+generate_new_columns_with_differences_between_subsequent_columns_in_df <- function(
+    working_wide_df,
+    ordered_levels_colnames, # ORDERED names of columns in which subsequent values are present.
+    yesno_to_yesno = F # just one of the functions to be used. Perhaps replace this system with function taken as an argument?
+    )
+{
+  
+  seq_of_levels_to_calculate_values_over <- seq(2, length(ordered_levels_colnames))
+  
+  
+  
+  for (iter_ in seq_of_levels_to_calculate_values_over ) {
+    
+    previous_colname <- ordered_levels_colnames[iter_-1]
+    
+    current_colname <- ordered_levels_colnames[iter_]
+    
+    transition_name <- paste0(previous_colname, "_to_", current_colname)
+    
+    
+    if (yesno_to_yesno) {
+      
+      working_wide_df[[transition_name]] <- dplyr::case_when(
+        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% T ~ "yes_to_yes",
+        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% F ~ "yes_to_no",
+        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% T ~ "no_to_yes",
+        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% F ~ "no_to_no")
+    }
+  }
+  
+  return(working_wide_df)
+}
+
+

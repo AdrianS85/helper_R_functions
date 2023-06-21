@@ -199,3 +199,37 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
 }
 
 
+
+
+
+
+
+
+
+
+get_xml_to_preety_dict_from_tool <- function(
+    tool_adress,
+    xml_variable_name,
+    variable_name_colname = "list_name",
+    tool_sheet_with_dict = "choices",
+    xml_colname = "name",
+    preety_colname = "label::English"
+    )
+{
+  tool_ <- readxl::read_excel(
+    path = tool_adress,
+    sheet = tool_sheet_with_dict,
+    col_types = "text")
+  
+  tool_vars <- subset(
+    x = tool_,
+    subset = tool_[[variable_name_colname]] %in% xml_variable_name,
+    select = c(xml_colname, preety_colname))
+  
+  ### !!! here xml_colnames need to be treated in the same way as variables during cleaning process to be able to be matched.
+  
+  tool_vars
+  
+  
+  
+}

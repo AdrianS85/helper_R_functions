@@ -304,10 +304,10 @@ add_binaries_from_any_column_to_dataset <- function(
     sep_for_binaries,
     sep_between_values_present_within_one_cell = NULL # if NULL, that means that column has only 1 possible value in any cell
 )
-{
-  assertthat::assert_that("data.frame" %in% class(dataset), msg = "column_ needs to be a simple character vector")
-  
+{ 
   temp <- subset(dataset, select = column_name)
+
+  temp[[1]] <- as.character(temp[[1]])
   
   ### !!! beware of escape symbols such as \t - its not tested against it
   all_levels <- purrr::map(

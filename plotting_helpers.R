@@ -298,15 +298,15 @@ order_numericlike_factors <- function(
 
 
 
-get_binaries_from_any_column <- function(
+add_binaries_from_any_column_to_dataset <- function(
     dataset,
     column_name,
     sep_for_binaries,
     sep_between_values_present_within_one_cell = NULL # if NULL, that means that column has only 1 possible value in any cell
-    )
+)
 {
   assertthat::assert_that("data.frame" %in% class(dataset), msg = "column_ needs to be a simple character vector")
-
+  
   temp <- subset(dataset, select = column_name)
   
   ### !!! beware of escape symbols such as \t - its not tested against it
@@ -320,8 +320,8 @@ get_binaries_from_any_column <- function(
         
       } else x
       
-      })
-
+    })
+  
   all_levels_vars <- na.omit( unique( rlist::list.ungroup(all_levels) ) )
   
   all_levels_names <- stringr::str_c(column_name, sep_for_binaries, all_levels_vars)
@@ -335,5 +335,5 @@ get_binaries_from_any_column <- function(
       no = NA)
   }
   
-  return(temp)
+  cbind(dataset, temp[,-1])
 }

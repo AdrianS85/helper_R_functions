@@ -8,6 +8,7 @@ generate_alluvial <- function(
     theme_ = NULL,
     #background_color = NULL, # Can be set to "transparent" or "white" e.g.
     color_labels = NULL,
+    pallette_ = "Set2",
     x_name = NULL,
     y_name = NULL,
     stratum_name = NULL, # this is the color legend name
@@ -32,7 +33,7 @@ generate_alluvial <- function(
   if (is.null(subtitle_name)) { subtitle_name <- "" }  
   
   p_ <- ggplot(dataset, aes(x = x_, stratum = stratum_, alluvium = alluvium_, fill = stratum_, label = stratum_)) +
-    scale_fill_brewer(labels = color_labels, type = "qual", palette = "Set2") +
+    scale_fill_brewer(labels = color_labels, type = "qual", palette = pallette_) +
     scale_x_discrete(expand = c(.1, .1), limits = x_level_order) +
     geom_flow() +
     geom_stratum(alpha = .5) +

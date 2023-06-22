@@ -337,3 +337,49 @@ add_binaries_from_any_column_to_dataset <- function(
   
   cbind(dataset, temp[,-1])
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+get_top_freq_categories_from_vector_of_categories <- function(
+    vector_,
+    return_top_n,
+    decreasing_ = T,
+    remove_na = T,
+    categories_to_remove = NULL # this needs to be character vector
+    )
+{
+  tabyl_ <- janitor::tabyl(vector_)
+  
+  return_ <- list(raw_table = tabyl_)
+  
+  if (remove_na) { tabyl_ <- subset(tabyl_, !is.na(tabyl_[[1]]) ) }
+  
+  if ( !is.null(categories_to_remove) ) { tabyl_ <-  subset(tabyl_, !(tmp_general_counts[[1]] %in% categories_to_remove) ) }
+  
+  tabyl_ <- tabyl_[order(tabyl_$n, decreasing = decreasing_),]
+  
+  if (return_top_n > nrow(tabyl_)) { return_top_n <- nrow(tabyl_) }
+  
+  top_values <- tabyl_[[1]][1:return_top_n]
+
+  return_$top_values <- top_values
+  
+  return(return_)
+}

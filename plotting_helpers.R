@@ -285,3 +285,55 @@ order_numericlike_factors <- function(
 
   forcats::fct_relevel(.f = factor_vec, as.character(fac_levels_as_num_sorted))
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+get_binaries_from_any_column <- function(
+    dataset,
+    column_name,
+    sep_for_binaries,
+    sep_between_values_present_within_one_cell = NULL # if NULL, that means that column has only 1 possible value in any cell
+    )
+{
+  assertthat::assert_that("data.frame" %in% class(dataset), msg = "column_ needs to be a simple character vector")
+
+  temp <- subset(dataset, select = column_name)
+  
+  ### !!! beware of escape symbols such as \t - its not tested against it
+  all_levels <- purrr::map(
+    .x = temp[[1]],
+    .f = function(x){
+      
+      if (!is.null(sep_between_values_present_within_one_cell)) {
+        
+        if (!is.na(x)) { stringr::str_split_1(string = x, pattern = sep_between_values_present_within_one_cell) } else NA 
+        
+      } else x
+      
+      })
+
+  all_levels_vars <- na.omit( unique( rlist::list.ungroup(all_levels) ) )
+  
+  all_levels_names <- stringr::str_c(column_name, sep_for_binaries, all_levels_vars)
+  
+  
+  for (lev_nb in seq(1,length(all_levels_vars))) {
+    
+    temp[[ all_levels_names[lev_nb] ]] <- ifelse(
+      test = stringr::str_detect(string = temp[[1]], pattern = all_levels_vars[lev_nb]),
+      yes = all_levels_vars[lev_nb],
+      no = NA)
+  }
+  
+  return(temp)
+}

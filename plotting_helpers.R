@@ -244,3 +244,27 @@ get_xml_to_preety_dict_from_tool <- function(
   
   
 }
+
+
+
+
+
+
+
+
+
+
+
+order_numericlike_factors <- function(
+    factor_vec,
+    decreasing_ = F)
+{
+  assertthat::assert_that(class(factor_vec) == "factor", msg = "factor_vec is not a factor")
+  assertthat::assert_that(all(!is.na(as.numeric(levels(factor_vec)))), msg = "factor_vec levels dont translate to numerics")
+
+  fac_levels_as_num <- as.numeric(levels(factor_vec))
+  
+  fac_levels_as_num_sorted <- sort(x = fac_levels_as_num, decreasing = decreasing_)
+
+  forcats::fct_relevel(.f = factor_vec, as.character(fac_levels_as_num_sorted))
+}

@@ -110,7 +110,9 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
 convert_columns_to_given_types_using_vector_dicts <- function(
     df_to_convert,
     col_names, # vector of column names
-    col_types # vector of type names 'character', 'numeric', 'Date' or 'factor', corresponding to given column names. date actually doesnt work very well with our current format
+    col_types, # vector of type names 'character', 'numeric', 'Date' or 'factor', corresponding to given column names. date actually doesnt work very well with our current format
+    order_numericlike_factors_ = T,
+    order_numericlike_factors_decreasing_ = F
 )
 {
   
@@ -126,7 +128,7 @@ convert_columns_to_given_types_using_vector_dicts <- function(
   if (nrow(cols_in_df_absent_in_col_names) != 0) { 
     
     warning(paste0("BEWARE: some columns names in the data frame do not have their analouges in the col_names vector:\n"), paste(colnames(cols_in_df_absent_in_col_names), collapse = ", "))
-    }
+  }
   
   
   
@@ -153,7 +155,21 @@ convert_columns_to_given_types_using_vector_dicts <- function(
         warning("BEWARE: column '", column_, "' provided in col_names is missing in the dataset")
       }
       
-      convert_function(df_to_convert[[column_]])
+      return_ <- convert_function(df_to_convert[[column_]])
+      
+      shall_i_order_numericlike_factors_ <- ( order_numericlike_factors_ &&  type_ == "factor" && all(!is.na(as.numeric(levels(return_)))) )
+      
+      
+      if (shall_i_order_numericlike_factors_) {
+        
+        return_ <- order_numericlike_factors(
+          factor_vec = return_,
+          decreasing_ = order_numericlike_factors_decreasing_)
+        
+      }
+      
+      return(return_)
+      
     })
   
   converted_df_ <- subset(converted_df_, select = colnames(converted_df_) %in% colnames(df_to_convert))

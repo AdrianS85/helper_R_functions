@@ -114,14 +114,25 @@ convert_columns_to_given_types_using_vector_dicts <- function(
 )
 {
   
+  assertthat::assert_that("data.frame" %in% class(df_to_convert), msg = "ERROR: df_to_convert is not data frame")
+  assertthat::assert_that("character" %in% class(col_names), msg = "ERROR: col_names is not of class character")
+  assertthat::assert_that("character" %in% class(col_types), msg = "ERROR: col_types is not of class character")
+  assertthat::assert_that(length(col_names) == length(col_types), msg = "ERROR: col_names and col_types have different lenghts")
+  
+  colnames(df_to_convert)
+  
+  cols_in_df_absent_in_col_names <- subset(df_to_convert, select = !(colnames(df_to_convert) %in% col_names) )
+  
+  if (nrow(cols_in_df_absent_in_col_names) != 0) { 
+    
+    warning(paste0("BEWARE: some columns names in the data frame do not have their analouges in the col_names vector:\n"), paste(colnames(cols_in_df_absent_in_col_names), collapse = ", "))
+    }
+  
+  
+  
   dict_ <- as.list(col_types)
   names(dict_) <- col_names
   
-  cols_in_df_absent_in_col_names <- subset(df_to_convert, select = !(colnames(df_to_convert) %in% col_names) )
-
-  
-  if (ncol(cols_in_df_absent_in_col_names) != 0) { warning("BEWARE: some columns names in the data frame do not have their analouges in the col_names vector") }
-
   
   
   converted_df_ <- purrr::imap_dfc(
@@ -150,7 +161,7 @@ convert_columns_to_given_types_using_vector_dicts <- function(
   converted_df_ <- cbind(converted_df_, cols_in_df_absent_in_col_names)
   
   converted_df_[,colnames(df_to_convert)]
-
+  
 }
 
 

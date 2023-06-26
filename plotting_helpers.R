@@ -369,7 +369,7 @@ get_top_freq_categories_from_vector_of_categories <- function(
   
   if (remove_na) { tabyl_ <- subset(tabyl_, !is.na(tabyl_[[1]]) ) }
   
-  if ( !is.null(categories_to_remove) ) { tabyl_ <-  subset(tabyl_, !(tmp_general_counts[[1]] %in% categories_to_remove) ) }
+  if ( !is.null(categories_to_remove) ) { tabyl_ <-  subset(tabyl_, !(tabyl_[[1]] %in% categories_to_remove) ) }
   
   tabyl_ <- tabyl_[order(tabyl_$n, decreasing = decreasing_),]
   

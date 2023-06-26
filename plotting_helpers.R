@@ -85,20 +85,25 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
     df_,
     select = colnames_used)
   
+  
+  
   df_only_disagg_cols_ <- purrr::map_dfc(
     .x = df_only_disagg_cols,
     .f = function(col_){
       
+      assertthat::assert_that(c(presence_indicator, absence_indicator) %in% unique(col_), paste0("BEWARE: no provided presenceabsence_indicators were found in column ", col_, "\nAre You sure You provided correct presence/absence_indicators?"))
+
       col_[col_ %in% presence_indicator] <- T
       
       col_[col_ %in% absence_indicator] <- F
+      
       col_
     })
   
   output <- tibble::enframe(
-      purrr::map_int(df_only_disagg_cols_, sum, na.rm =T),
-      name = "this_value",
-      value = "occurs_this_many_times" )
+    purrr::map_int(df_only_disagg_cols_, sum, na.rm =T),
+    name = "this_value",
+    value = "occurs_this_many_times" )
   
   output <- output[order(output$occurs_this_many_times, decreasing = order_by_decreasing_),]
   

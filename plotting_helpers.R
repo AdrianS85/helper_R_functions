@@ -331,7 +331,7 @@ add_binaries_from_any_column_to_dataset <- function(
 )
 {
   temp <- subset(dataset, select = column_name)
-
+  
   temp[[1]] <- as.character(temp[[1]])
   
   ### !!! beware of escape symbols such as \t - its not tested against it
@@ -354,10 +354,10 @@ add_binaries_from_any_column_to_dataset <- function(
   
   for (lev_nb in seq(1,length(all_levels_vars))) {
     
-    temp[[ all_levels_names[lev_nb] ]] <- ifelse(
-      test = stringr::str_detect(string = temp[[1]], pattern = all_levels_vars[lev_nb]),
-      yes = T,
-      no = F)
+    temp[[ all_levels_names[lev_nb] ]] <- dplyr::case_when(
+      is.na(temp[[1]]) ~ NA,
+      stringr::str_detect(string = temp[[1]], pattern = all_levels_vars[lev_nb]) ~ T,
+      !stringr::str_detect(string = temp[[1]], pattern = all_levels_vars[lev_nb]) ~ F)
   }
   
   cbind(dataset, temp[,-1])

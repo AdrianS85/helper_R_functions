@@ -142,7 +142,7 @@ convert_columns_to_given_types_using_vector_dicts <- function(
       
       type_ <- tolower(type_)
       
-      assertthat::assert_that(type_ %in% c("character", "numeric", "date", "factor", "logical"), msg = "only recognized values are 'character', 'numeric' or 'date', 'factor'")
+      assertthat::assert_that(type_ %in% c("character", "numeric", "date", "factor", "logical"), msg = "only recognized values are 'character', 'numeric', 'date', 'factor', 'logical'")
       ### !!! not really, but ok for now
       
       if (type_ == "date") { type_ <- "Date" } ### !!! this doesnt really work that well

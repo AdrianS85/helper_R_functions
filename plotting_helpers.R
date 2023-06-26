@@ -85,14 +85,12 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
     df_,
     select = colnames_used)
   
-  
+  ### !!! here need to put a check for presence/absence indicator
   
   df_only_disagg_cols_ <- purrr::map_dfc(
     .x = df_only_disagg_cols,
     .f = function(col_){
       
-      assertthat::assert_that(all(c(presence_indicator, absence_indicator) %in% unique(col_)), msg = paste0("BEWARE: no provided presenceabsence_indicators were found in column ", col_, "\nAre You sure You provided correct presence/absence_indicators?"))
-
       col_[col_ %in% presence_indicator] <- T
       
       col_[col_ %in% absence_indicator] <- F

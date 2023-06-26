@@ -383,3 +383,48 @@ get_top_freq_categories_from_vector_of_categories <- function(
   
   return(return_)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+get_complete_case_individuals_that_are_also_present_in_all_rounds <- function(
+    ds_,
+    nb_of_rounds,
+    unique_id_col_
+  )
+{
+  
+  ds_ <- ds_[complete.cases(ds_),]
+  
+  count_nb_of_times_given_longit_occurs <- janitor::tabyl( ds_[[unique_id_col_]] )
+  
+  resp_present_all_rounds <- ifelse(
+    test = count_nb_of_times_given_longit_occurs$n == nb_of_rounds,
+    yes = count_nb_of_times_given_longit_occurs[[1]],
+    no = NA)
+  
+  resp_present_all_rounds <- na.omit(resp_present_all_rounds)
+  
+  resp_present_all_rounds_logical <- ds_[[unique_id_col_]] %in% resp_present_all_rounds
+  
+  ds_ <- subset(ds_, subset = resp_present_all_rounds_logical)
+  
+  removed_ds <- subset(ds_, subset = !resp_present_all_rounds_logical)
+  
+  return( list(updated_ds = ds_, removed_ds = removed_ds) )
+}

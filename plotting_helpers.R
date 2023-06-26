@@ -160,9 +160,9 @@ convert_columns_to_given_types_using_vector_dicts <- function(
       
       if (type_ == "logical") {
         
-        unique_vals <- unique(df_to_convert[[column_]])
+        unique_vals <- na.omit(unique(df_to_convert[[column_]]))
         
-        assertthat::assert_that(unique_vals %in% c("0","1") | c(0,1) | c(T,F), "values in ", column_, " column not recognized as logicals")
+        assertthat::assert_that(all(unique_vals %in% c("0","1") | c(0,1) | c(T,F)), paste0("values in ", column_, " column not recognized as logicals"))
         
         df_to_convert[[column_]] <- as.numeric(df_to_convert[[column_]])
         

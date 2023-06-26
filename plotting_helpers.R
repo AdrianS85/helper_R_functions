@@ -150,7 +150,7 @@ convert_columns_to_given_types_using_vector_dicts <- function(
   converted_df_ <- purrr::imap_dfc(
     .x = dict_,
     .f = function(type_, column_){
-      
+      # if (vars$variable == "hh_change_reason/repondent_elsewhere_with") { browser() }
       type_ <- tolower(type_)
       
       assertthat::assert_that(type_ %in% c("character", "numeric", "date", "factor", "logical"), msg = "only recognized values are 'character', 'numeric', 'date', 'factor', 'logical'")
@@ -167,7 +167,9 @@ convert_columns_to_given_types_using_vector_dicts <- function(
         
         unique_vals <- na.omit(unique(df_to_convert[[column_]]))
         
-        assertthat::assert_that(all(unique_vals %in% c("0","1") | c(0,1) | c(T,F)), paste0("values in ", column_, " column not recognized as logicals"))
+        
+        
+        assertthat::assert_that(all(unique_vals %in% c("0","1") | c(0,1) | c(T,F)), msg = paste0("values in ", column_, " column not recognized as logicals"))
         
         df_to_convert[[column_]] <- as.numeric(df_to_convert[[column_]])
         

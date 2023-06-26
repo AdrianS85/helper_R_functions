@@ -82,7 +82,7 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
   
   df_only_disagg_cols <- subset(
     df_,
-    select = colnames_used )
+    select = colnames_used)
   
   df_only_disagg_cols_ <- purrr::map_dfc(
     .x = df_only_disagg_cols,
@@ -94,7 +94,10 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
       col_
     })
   
-  output <- tibble::enframe( purrr::map_int(df_only_disagg_cols_, sum, na.rm =T), name = "this_value", value = "occurs_this_many_times" )
+  output <- tibble::enframe(
+      purrr::map_int(df_only_disagg_cols_, sum, na.rm =T),
+      name = "this_value",
+      value = "occurs_this_many_times" )
   
   output <- output[order(output$occurs_this_many_times, decreasing = T),]
   

@@ -76,7 +76,8 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
     df_, # entire dataset
     binary_recognition_regex, # to get only disaggregated columns for given variable
     presence_indicator, # of the original data, usually 1 or T. will be force-changed to T
-    absence_indicator) # of the original data, usually 0 or F. will be force-changed to T
+    absence_indicator,
+    order_by_decreasing_ = T) # of the original data, usually 0 or F. will be force-changed to T
 {
   colnames_used <- colnames(df_)[stringr::str_detect(colnames(df_), binary_recognition_regex)]
   
@@ -99,7 +100,7 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
       name = "this_value",
       value = "occurs_this_many_times" )
   
-  output <- output[order(output$occurs_this_many_times, decreasing = T),]
+  output <- output[order(output$occurs_this_many_times, decreasing = order_by_decreasing_),]
   
   return( list(colnames_used = colnames_used, output = output) ) 
 }

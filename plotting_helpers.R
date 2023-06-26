@@ -126,6 +126,8 @@ convert_columns_to_given_types_using_vector_dicts <- function(
   assertthat::assert_that("character" %in% class(col_types), msg = "ERROR: col_types is not of class character")
   assertthat::assert_that(length(col_names) == length(col_types), msg = "ERROR: col_names and col_types have different lenghts")
   
+  
+  
   cols_in_df_absent_in_col_names <- subset(df_to_convert, select = !(colnames(df_to_convert) %in% col_names) )
   
   if (nrow(cols_in_df_absent_in_col_names) != 0) { 
@@ -149,9 +151,25 @@ convert_columns_to_given_types_using_vector_dicts <- function(
       assertthat::assert_that(type_ %in% c("character", "numeric", "date", "factor", "logical"), msg = "only recognized values are 'character', 'numeric', 'date', 'factor', 'logical'")
       ### !!! not really, but ok for now
       
+      
       if (type_ == "date") { type_ <- "Date" } ### !!! this doesnt really work that well
       
+      
       convert_function <- match.fun(paste0("as.", type_)) 
+      
+      
+      if (type_ == "logical") {
+        
+        unique_vals <- unique(df_to_convert[[column_]])
+        
+        assertthat::assert_that(unique_vals %in% c("0","1") | c(0,1) | c(T,F), "values in ", column_, " column not recognized as logicals")
+        
+        df_to_convert[[column_]] <- as.numeric(df_to_convert[[column_]])
+        
+      }
+      
+      
+      
       
       if ( !(column_ %in% colnames(df_to_convert)) ) { 
         df_to_convert[[column_]] <- NA ### !!! does this work from within map???

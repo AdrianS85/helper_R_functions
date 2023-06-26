@@ -150,7 +150,7 @@ convert_columns_to_given_types_using_vector_dicts <- function(
       convert_function <- match.fun(paste0("as.", type_)) 
       
       if ( !(column_ %in% colnames(df_to_convert)) ) { 
-        df_to_convert[[column_]] <- NA
+        df_to_convert[[column_]] <- NA ### !!! does this work from within map???
         warning("BEWARE: column '", column_, "' provided in col_names is missing in the dataset")
       }
       

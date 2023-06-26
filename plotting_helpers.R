@@ -91,7 +91,7 @@ count_occurances_of_disaggregated_multiple_answer_questions <- function(
     .x = df_only_disagg_cols,
     .f = function(col_){
       
-      assertthat::assert_that(c(presence_indicator, absence_indicator) %in% unique(col_), paste0("BEWARE: no provided presenceabsence_indicators were found in column ", col_, "\nAre You sure You provided correct presence/absence_indicators?"))
+      assertthat::assert_that(c(presence_indicator, absence_indicator) %in% unique(col_), msg = paste0("BEWARE: no provided presenceabsence_indicators were found in column ", col_, "\nAre You sure You provided correct presence/absence_indicators?"))
 
       col_[col_ %in% presence_indicator] <- T
       

@@ -428,3 +428,43 @@ get_complete_case_individuals_that_are_also_present_in_all_rounds <- function(
   
   return( list(updated_ds = ds_, removed_ds = removed_ds) )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+get_individual_perc_change_between_rounds <- function(
+    lev_to_lev_vector,
+    round_change_name,
+    var_name_,
+    output_name_
+    )
+{
+  
+  sum_for_category <- length(lev_to_lev_vector)
+  
+  column_tab <- janitor::tabyl(lev_to_lev_vector)
+  
+  column_tab$percent <- as.numeric( format(round(column_tab$percent * 100, 2) , nsmall = 2) )
+  
+  n_col_name <- paste0("num_of_resp_for_", var_name_)
+  
+  perc_col_name <- paste0("perc_of_resp_for_", var_name_)
+  
+  colnames(column_tab) <- c("change_type", n_col_name, perc_col_name)
+  
+  column_tab[[output_name_]] <- round_change_name
+  
+  column_tab[,c(4,1,3,2)]
+  
+}

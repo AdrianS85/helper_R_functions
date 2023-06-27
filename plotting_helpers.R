@@ -241,7 +241,8 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
         yes = df_[[colname_with_level_of_factor]],
         no = NA)
     }
-    # browser()
+
+    
     df_for_specific_nest <- df_for_specific
     
     df_for_specific_nest[[colname_with_level_of_factor]] <- NULL
@@ -282,7 +283,7 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
   
   
   
-
+  transition_names <- as.character()
   
   for (iter_ in seq_of_levels_to_calculate_values_over ) {
     
@@ -291,6 +292,8 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
     current_colname <- ordered_levels_colnames[iter_]
     
     transition_name <- paste0(previous_colname, "_to_", current_colname)
+    
+    transition_names <- c(transition_names, transition_name)
     
     specific_trans_name <- paste0(previous_colname, "_to_", current_colname, "_specific")
     
@@ -319,9 +322,11 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
       
       df_[[specific_trans_name]] <- paste0(df_[[previous_colname]]," _to_ ",  df_[[current_colname]])
       
+      
+      
     }  
   }
-  return(df_)
+  return(list(df = df_, transition_names = transition_name))
 }
 
 

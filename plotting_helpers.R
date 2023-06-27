@@ -359,11 +359,14 @@ add_binaries_from_any_column_to_dataset <- function(
   
   
   for (lev_nb in seq(1,length(all_levels_vars))) {
+    browser()
+    
+    exact_value <- paste0("^", all_levels_vars[lev_nb], "$")
     
     temp[[ all_levels_names[lev_nb] ]] <- dplyr::case_when(
       is.na(temp[[1]]) ~ NA,
-      stringr::str_detect(string = temp[[1]], pattern = all_levels_vars[lev_nb]) ~ T,
-      !stringr::str_detect(string = temp[[1]], pattern = all_levels_vars[lev_nb]) ~ F)
+      stringr::str_detect(string = temp[[1]], pattern = exact_value) ~ T,
+      !stringr::str_detect(string = temp[[1]], pattern = exact_value) ~ F)
   }
   
   cbind(dataset, temp[,-1])

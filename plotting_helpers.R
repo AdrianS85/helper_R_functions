@@ -326,7 +326,7 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
       
     }  
   }
-  return(list(df = df_, transition_names = transition_name))
+  return(list(df = df_, transition_names = transition_names))
 }
 
 

@@ -358,9 +358,7 @@ add_binaries_from_any_column_to_dataset <- function(
   all_levels_names <- stringr::str_c(column_name, sep_for_binaries, all_levels_vars)
   
   
-  for (lev_nb in seq(1,length(all_levels_vars))) {
-    browser()
-    
+  for (lev_nb in seq(1,length(all_levels_vars))) {    
     exact_value <- paste0("^", all_levels_vars[lev_nb], "$")
     
     temp[[ all_levels_names[lev_nb] ]] <- dplyr::case_when(

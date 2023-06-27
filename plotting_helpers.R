@@ -217,15 +217,71 @@ convert_columns_to_given_types_using_vector_dicts <- function(
 
 
 
-### !!! Here we can input functions which will take a specific group of df columns and do something for each subsequent pair of them. So sliding window basically
 generate_new_columns_with_differences_between_subsequent_columns_in_df <- function(
-    working_wide_df,
+    df_, # working_wide_df
     ordered_levels_colnames, # ORDERED names of columns in which subsequent values are present.
-    function_ # function to be used "yesno_to_yesno", "stable_to_change"
+    marker_of_presence_for_given_value_in_given_round = T,
+    colname_with_level_of_factor = "name", # usualy colname/multiple_choice_name - as in binary columns
+    unique_id_col = "LONGIT_ID",
+    function_ # function to be used "yesno_to_yesno", "stable_to_change", "alluv_like"
 )
 {
   
   seq_of_levels_to_calculate_values_over <- seq(2, length(ordered_levels_colnames))
+  
+  
+  if (function_ == "alluv_like") {
+    
+    df_for_specific <- df_
+    
+    for (col_ in ordered_levels_colnames) {
+      
+      df_for_specific[[col_]] <- ifelse(
+        test = df_[[col_]] == marker_of_presence_for_given_value_in_given_round,
+        yes = df_[[colname_with_level_of_factor]],
+        no = NA)
+    }
+    # browser()
+    df_for_specific_nest <- df_for_specific
+    
+    df_for_specific_nest[[colname_with_level_of_factor]] <- NULL
+    
+    df_for_specific_nest <- tidyr::nest(dplyr::group_by(df_for_specific_nest, !!as.symbol(unique_id_col)))
+    
+    df_for_specific_nest_result <- purrr::map2(
+      .x = df_for_specific_nest[["data"]],
+      .y = df_for_specific_nest[[unique_id_col]],
+      .f = function(resp_, resp_name){
+        
+        
+        
+        purrr::map_dfc(
+          .x = resp_,
+          .f = function(col_){
+            # browser()
+            col__ <- col_[!is.na(col_)]
+            
+            assertthat::assert_that(length(col__) == 1, msg = paste0("for alluv_like to work, questions cannot have multiple possible answers, but must have exactly 1 answer in each timepoint. This is not the case for ", resp_name))
+            
+            col__ })
+        
+        
+        
+      })
+
+    df_for_specific_nest_result_df <- rlist::list.rbind(df_for_specific_nest_result)
+    
+    df_for_specific_nest_result_df[[unique_id_col]] <- df_for_specific_nest[[unique_id_col]]
+    
+    df_for_specific_nest_result_df[[colname_with_level_of_factor]] <- "irrelevant"
+
+    df_for_specific_nest_result_df <- df_for_specific_nest_result_df[,colnames(df_)]
+
+    df_ <- df_for_specific_nest_result_df
+  }
+  
+  
+  
 
   
   for (iter_ in seq_of_levels_to_calculate_values_over ) {
@@ -236,25 +292,36 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
     
     transition_name <- paste0(previous_colname, "_to_", current_colname)
     
+    specific_trans_name <- paste0(previous_colname, "_to_", current_colname, "_specific")
+    
     
     if (function_ == "yesno_to_yesno") {
       
-      working_wide_df[[transition_name]] <- dplyr::case_when(
-        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% T ~ "yes_to_yes",
-        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% F ~ "yes_to_no",
-        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% T ~ "no_to_yes",
-        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% F ~ "no_to_no")
+      df_[[transition_name]] <- dplyr::case_when(
+        df_[[previous_colname]] %in% T & df_[[current_colname]] %in% T ~ "yes_to_yes",
+        df_[[previous_colname]] %in% T & df_[[current_colname]] %in% F ~ "yes_to_no",
+        df_[[previous_colname]] %in% F & df_[[current_colname]] %in% T ~ "no_to_yes",
+        df_[[previous_colname]] %in% F & df_[[current_colname]] %in% F ~ "no_to_no")
       
     } else if (function_ == "stable_to_change"){
       
-      working_wide_df[[transition_name]] <- dplyr::case_when(
-        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% T ~ "stable",
-        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% F ~ "change",
-        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% T ~ "change",
-        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% F ~ NA)
-    }
+      df_[[transition_name]] <- dplyr::case_when(
+        df_[[previous_colname]] %in% T & df_[[current_colname]] %in% T ~ "stable",
+        df_[[previous_colname]] %in% T & df_[[current_colname]] %in% F ~ "change",
+        df_[[previous_colname]] %in% F & df_[[current_colname]] %in% T ~ "change",
+        df_[[previous_colname]] %in% F & df_[[current_colname]] %in% F ~ NA)
+      
+    } else if (function_ == "alluv_like"){
+      
+      df_[[transition_name]] <- dplyr::case_when(
+        df_[[previous_colname]] == df_[[current_colname]] ~ "stable",
+        TRUE ~ "change")
+      
+      df_[[specific_trans_name]] <- paste0(df_[[previous_colname]]," _to_ ",  df_[[current_colname]])
+      
+    }  
   }
-  return(working_wide_df)
+  return(df_)
 }
 
 

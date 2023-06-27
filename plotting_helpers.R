@@ -221,13 +221,12 @@ convert_columns_to_given_types_using_vector_dicts <- function(
 generate_new_columns_with_differences_between_subsequent_columns_in_df <- function(
     working_wide_df,
     ordered_levels_colnames, # ORDERED names of columns in which subsequent values are present.
-    yesno_to_yesno = F # just one of the functions to be used. Perhaps replace this system with function taken as an argument?
-    )
+    function_ # function to be used "yesno_to_yesno", "stable_to_change"
+)
 {
   
   seq_of_levels_to_calculate_values_over <- seq(2, length(ordered_levels_colnames))
-  
-  
+
   
   for (iter_ in seq_of_levels_to_calculate_values_over ) {
     
@@ -238,16 +237,23 @@ generate_new_columns_with_differences_between_subsequent_columns_in_df <- functi
     transition_name <- paste0(previous_colname, "_to_", current_colname)
     
     
-    if (yesno_to_yesno) {
+    if (function_ == "yesno_to_yesno") {
       
       working_wide_df[[transition_name]] <- dplyr::case_when(
         working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% T ~ "yes_to_yes",
         working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% F ~ "yes_to_no",
         working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% T ~ "no_to_yes",
         working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% F ~ "no_to_no")
+      
+    } else if (function_ == "stable_to_change"){
+      
+      working_wide_df[[transition_name]] <- dplyr::case_when(
+        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% T ~ "stable",
+        working_wide_df[[previous_colname]] %in% T & working_wide_df[[current_colname]] %in% F ~ "change",
+        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% T ~ "change",
+        working_wide_df[[previous_colname]] %in% F & working_wide_df[[current_colname]] %in% F ~ NA)
     }
   }
-  
   return(working_wide_df)
 }
 

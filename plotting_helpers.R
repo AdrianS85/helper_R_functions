@@ -572,3 +572,34 @@ get_individual_perc_change_between_rounds <- function(
   column_tab[,c(4,1,3,2)]
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return_df_with_responders_who_had_given_value_of_given_var_at_given_round <- function(
+    df_,
+    round_col,
+    round_val,
+    var_col,
+    var_value,
+    uuid_col
+)
+{
+  responders <- subset(
+    x = df_,
+    subset = df_[[var_col]] %in% var_value & df_[[round_col]] %in% round_val)[[uuid_col]]
+  
+  subset(
+    x = df_,
+    subset = df_[[uuid_col]] %in% responders)
+}

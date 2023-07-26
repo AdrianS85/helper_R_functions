@@ -51,7 +51,7 @@ extract_from_string <- function(chr_vec, regex_one = '', regex_two = '')
 
 
 # INPUT: changes values in to_recode_chrvec based on key values in replace_this_chrvec into with_this_chrvec values; OUTPUT: chrvec where to_recode_chrvec are replaced with approprate value from replace_this_chrvec / with_this_chrvec key/value pairs
-recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, with_this_chrvec)
+recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, with_this_chrvec, if_this_value_not_found_retain_old_value = F)
 {
   assertthat::assert_that(length(replace_this_chrvec) == length(with_this_chrvec), msg = 'replace_this_chrvec and with_this_chrvec arguments need to be the same lenght. This is because every element in first vector will be recoded as corresponding element in the second vector')
   assertthat::assert_that(!any(duplicated(replace_this_chrvec)), msg = 'replace_this_chrvec argument includes duplicated values. This cannot be, because we use one specific value to be changed into another specific value')
@@ -66,7 +66,7 @@ recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, wi
   to_recode_chrvec <- data.frame(to_recode_chrvec)
   
   to_recode_chrvec$order <- as.integer(rownames(to_recode_chrvec))
-
+  
   result_chrvec <-
     merge(
       x = to_recode_chrvec,
@@ -77,6 +77,15 @@ recode_values_based_on_key <- function(to_recode_chrvec, replace_this_chrvec, wi
     )
   
   result_chrvec <- result_chrvec[order(result_chrvec$order),]
+  
+  if (if_this_value_not_found_retain_old_value) {
+    
+    result_chrvec$with_this_chrvec <- ifelse(
+      test = is.na(result_chrvec$with_this_chrvec),
+      yes = result_chrvec$to_recode_chrvec,
+      no = result_chrvec$with_this_chrvec)
+    
+  }
   
   return(as.character(result_chrvec$with_this_chrvec)) ### !!! ADDED LATER - as.character()
 }
